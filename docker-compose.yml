@@ -1,0 +1,19 @@
+version: "3"
+services:
+  product-service:
+    build: ./product-service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./product-service:/usr/src/app
+    env_file:
+      - ./product-service/.env
+
+  image-service:
+    build: ./image-service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./image-service:/usr/src/app
+    env_file:
+      - ./image-service/.env
