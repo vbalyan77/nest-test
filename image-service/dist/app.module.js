@@ -8,16 +8,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const mongoose_1 = require("@nestjs/mongoose");
+const config_1 = require("@nestjs/config");
+const image_module_1 = require("./modules/image/image.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        imports: [
+            config_1.ConfigModule.forRoot(),
+            mongoose_1.MongooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: async (configService) => {
+                    console.log({ uri: configService.get('DB_URI') });
+                    try {
+                        const uri = configService.get('DB_URI');
+                        console.log(`Trying to connect to database with URI: ${uri}`);
+                        return {
+                            uri,
+                        };
+                    }
+                    catch (error) {
+                        console.error('Error while connecting to the database', error);
+                        throw error;
+                    }
+                },
+                inject: [config_1.ConfigService],
+            }),
+            image_module_1.ImageModule,
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

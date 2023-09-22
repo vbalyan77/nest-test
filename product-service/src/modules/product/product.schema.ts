@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as paginate from 'mongoose-paginate-v2';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
@@ -29,3 +30,5 @@ export class Product extends Document {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+ProductSchema.plugin(paginate);

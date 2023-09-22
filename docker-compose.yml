@@ -2,6 +2,8 @@ version: "3"
 services:
   product-service:
     build: ./product-service
+    depends_on:
+      - mongodb
     ports:
       - "3000:3000"
     volumes:
@@ -11,9 +13,41 @@ services:
 
   image-service:
     build: ./image-service
+    depends_on:
+      - mongodb
     ports:
       - "3001:3001"
     volumes:
       - ./image-service:/usr/src/app
     env_file:
       - ./image-service/.env
+
+  user-service:
+    build: ./user-service
+    depends_on:
+      - mongodb
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./user-service:/usr/src/app
+    env_file:
+      - ./user-service/.env
+
+  auth-service:
+    build: ./auth-service
+    depends_on:
+      - mongodb
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./auth-service:/usr/src/app
+    env_file:
+      - ./auth-service/.env
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017"
